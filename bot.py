@@ -657,8 +657,7 @@ async def add_options(user, message, types_list, sub_name):
         try:
             await client.add_reaction(message, options[count])
         except discord.NotFound as error:
-            # unused catch statement
-            print(error)
+            error = "NOT FOUND (status code: 404): Unknown Message"
 
 
 @client.event
