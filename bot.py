@@ -353,6 +353,8 @@ async def help_command(message):
             message_content += '    *Aliases: {}\n\n'.format(command['aliases'])
         else:
             message_content += '\n'
+    message_content += "\nPlease note: This bot is being tested on this server, so if you encounter any errors," + \
+                       "please inform MrCouchy."
     message_content += '```'
 
     await client.send_message(channel, message_content)
