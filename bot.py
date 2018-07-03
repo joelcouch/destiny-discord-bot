@@ -769,6 +769,8 @@ async def clear_fireteam(user):
         await delete_if_can(active_activity[user.id]['Message'])
         del raid_messages[active_activity[user.id]['Message'].id]
         del active_activity[user.id]
+        return True
+    return False
 
 
 async def update_main_message(user):
