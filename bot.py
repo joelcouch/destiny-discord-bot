@@ -578,7 +578,7 @@ async def activity_command(message, command_params, type_override=None):
 
 
 async def delete_if_can(message):
-    if channel_is_public(message.channel):
+    if channel_is_public(message.channel) or client.user.id == message.author.id:
         await client.delete_message(message)
 
 
