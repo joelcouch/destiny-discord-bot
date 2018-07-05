@@ -11,8 +11,11 @@ from discord.ext import commands
 description = 'I like trains.'
 prefix = '!'
 
+token = open('token.txt', 'r').read()
+
 print("")
 print('Launching bot...', end="", flush=True)
+
 client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
 
@@ -942,4 +945,4 @@ class Counter(Thread):
                 self._stop.set()
 
 
-client.run('NDYxODA1MDE2NTU0OTMwMTkx.DhYo9Q.k58KKLIrUZGkuwxodg7v-CLOGLs')
+client.run(token)
