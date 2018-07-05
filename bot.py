@@ -526,7 +526,7 @@ def is_lfg_channel(sent_channel):
     found = False
 
     for channel_item in lfg_channels:
-        if sent_channel == channel_item:
+        if sent_channel.name == channel_item:
             found = True
     return found
 
