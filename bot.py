@@ -250,7 +250,7 @@ async def on_ready():
         channel = discord.utils.get(client.get_all_channels(), name=item)
         if channel.type == discord.ChannelType.text:
             lfg_channels.append(channel)
-
+    print(lfg_channels)
 
 def test():
     print('{} is running.'.format(client.user.name))
