@@ -403,7 +403,7 @@ async def clear_command_with_message(message, command_params):
 def get_activity_info_template(user):
     global active_activity
 
-    raid_info = user.mention + " is {}, who's interested?\n\n"
+    raid_info = user.mention + " is {}. 👍 if you're interested?\n\n"
     raid_info += "For: {}\n\n"
     raid_info += "Time: {}\n\n"
     raid_info += "Players Needed: {}\n\n"
