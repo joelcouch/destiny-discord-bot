@@ -19,10 +19,7 @@ print('Launching bot...', end="", flush=True)
 client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
 
-lfg_channels = []
-monitoring_channels = [
-    'lfg', 'raid', 'looking-for-group', 'testing'
-]
+lfg_channels = ['lfg', 'raid', 'looking-for-group', 'testing', '🍕-dense-pizza-🍕']
 
 options = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫"]
 
@@ -242,15 +239,10 @@ jokes = [
 
 @client.event
 async def on_ready():
-    global monitoring_channels, lfg_channels, scheduler
+    global lfg_channels, scheduler
     print(" success!")
     scheduler.enter(1, 1, test)
     scheduler.run()
-    for item in monitoring_channels:
-        channel = discord.utils.get(client.get_all_channels(), name=item)
-        if channel.type == discord.ChannelType.text:
-            lfg_channels.append(channel)
-    print(lfg_channels)
 
 def test():
     print('{} is running.'.format(client.user.name))
