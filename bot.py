@@ -248,7 +248,7 @@ async def on_ready():
     scheduler.run()
     for item in monitoring_channels:
         channel = discord.utils.get(client.get_all_channels(), name=item)
-        if hasattr(channel, 'type') and channel.type.name == 'text':
+        if channel.type == discord.ChannelType.text:
             lfg_channels.append(channel)
 
 
