@@ -929,7 +929,7 @@ class Counter(Thread):
             sleep(1800)
             if self.user.id in active_activity.keys():
                 active_activity[self.user.id]['Time'] -= 0.5
-                if active_activity[self.user.id]['Time'] < 0:
+                if active_activity[self.user.id]['Time'] == 0:
                     self._stop.set()
                 else:
                     self.loop.create_task(update_main_message(self.user))
