@@ -27,7 +27,7 @@ active_activity = {}
 reaction_monitor_message = {}
 
 activity_types = ['Raid', 'Strike', 'Milestones', 'Other']
-raid_types = ['Leviathan', 'Eater of Worlds', 'Spire of Stars']
+raid_types = ['Leviathan', 'Eater of Worlds', 'Spire of Stars', 'Prestige Leviathan']
 strike_types = ['Vanguard', 'Nightfall', 'Heroic']
 milestone_types = ['Any', 'Flashpoint', 'Clan XP', 'Crucible', 'Other']
 other_types = ['Anything', 'Storyline', 'Cry']
