@@ -389,21 +389,21 @@ async def clear_command_with_channel(channel):
 
 
 async def clear_command_with_message(message, command_params):
-    if message.author.permissions_in(message.channel).administrator:
-        await clear_command_with_channel(message.channel)
+    # if message.author.permissions_in(message.channel).administrator:
+    await clear_command_with_channel(message.channel)
 
-        await delete_if_can(message)
-    else:
-        await client.start_private_message(message.author)
-        message_content = 'Sorry, you do not have administration rights to this channel,\n'
-        message_content += 'so you cannot clear the messages.'
-        await client.send_message(message.author, message_content)
+    await delete_if_can(message)
+    # else:
+    #     await client.start_private_message(message.author)
+    #     message_content = 'Sorry, you do not have administration rights to this channel,\n'
+    #     message_content += 'so you cannot clear the messages.'
+    #     await client.send_message(message.author, message_content)
 
 
 def get_activity_info_template(user):
     global active_activity
 
-    raid_info = user.mention + " is {}. 👍 if you're interested?\n\n"
+    raid_info = user.mention + " is {}. 👍 if you're interested.\n\n"
     raid_info += "For: {}\n\n"
     raid_info += "Time: {}\n\n"
     raid_info += "Players Needed: {}\n\n"
@@ -422,7 +422,6 @@ def get_activity_info_template(user):
     else:
         type_replace = "organising a fireteam"
 
-    players_list = ''
     players_needed_val = int(item_list['Players_Needed'])
     player_objects = item_list['Player_List']
 
@@ -433,10 +432,11 @@ def get_activity_info_template(user):
         time_string = "TBA"
     elif active_activity[user.id]["Time"] == 0:
         time_string = "Now"
+    elif active_activity[user.id]["Time"] < 0:
+        time_string = "Might've already started"
     else:
         hours = int(active_activity[user.id]["Time"])
         minutes = (active_activity[user.id]["Time"] * 60) % 60
-
         time_string = "about "
         if hours:
             time_string += str(hours) + " hour"
@@ -628,6 +628,7 @@ async def send_related_message(user):
                 else:
                     await client.send_message(user, "Event is all setup!")
                     print(user.name + " has setup an event.")
+                    await clear_command_with_channel(active_activity[user.id]["Channel"])
 
 
 async def add_options(user, message, types_list, sub_name):
@@ -754,6 +755,7 @@ async def user_request_clear_fireteam(message, message_content):
     else:
         message_content = "You don't have an active fireteam."
         await client.send_message(user, message_content)
+    await clear_command_with_channel(message.channel)
 
 
 async def clear_fireteam(user):
