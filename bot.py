@@ -30,7 +30,7 @@ activity_types = ['Raid', 'Strike', 'Milestones', 'Other']
 raid_types = ['Leviathan', 'Eater of Worlds', 'Spire of Stars', 'Prestige Leviathan']
 strike_types = ['Vanguard', 'Nightfall', 'Heroic']
 milestone_types = ['Any', 'Flashpoint', 'Clan XP', 'Crucible', 'Other']
-other_types = ['Anything', 'Storyline', 'Cry']
+other_types = ['Anything', 'Escalation Protocol', 'Storyline', 'A Cry']
 players_needed = ['1', '2', '3', '4', '5']
 
 raid_messages = {}
