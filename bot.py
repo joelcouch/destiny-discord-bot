@@ -20,6 +20,8 @@ print('Launching bot...', end="", flush=True)
 client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
 
+discord.opus.load_opus()
+
 lfg_channels = ['lfg', 'raid', 'looking-for-group', 'testing', '🍕-dense-pizza-🍕']
 syrion_channels = ["That's a wipe"]
 
