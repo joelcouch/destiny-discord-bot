@@ -379,8 +379,7 @@ commands = {
             'description': 'Completes a fireteam if no longer needed.',
             'aliases': '!cancel'
         }
-    ]
-    # ,
+    ],
     # 'Music': [
     #     {
     #         'name': 'play',
@@ -405,21 +404,21 @@ commands = {
     #         'description': 'Gets Syrion\'s thoughts.'
     #     }
     # ],
-    # 'Others': [
-    #     {
-    #         'name': 'joke',
-    #         'description': 'Tells a joke.',
-    #         'aliases': '!jokes'
-    #     },
-    #     {
-    #         'name': 'sexual',
-    #         'description': 'This does nothing, you filthy minded person.'
-    #     },
-    #     {
-    #         'name': 'help',
-    #         'description': 'Shows this message.'
-    #     }
-    # ]
+    'Others': [
+        {
+            'name': 'joke',
+            'description': 'Tells a joke.',
+            'aliases': '!jokes'
+        },
+        {
+            'name': 'sexual',
+            'description': 'This does nothing, you filthy minded person.'
+        },
+        {
+            'name': 'help',
+            'description': 'Shows this message.'
+        }
+    ]
 }
 
 
