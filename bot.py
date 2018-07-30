@@ -1,10 +1,11 @@
 from threading import Thread, Event
 from time import sleep
 import discord
-import random
 import sched
 import time
 import asyncio
+import os
+import random
 
 from discord.ext import commands
 
@@ -20,6 +21,7 @@ client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
 
 lfg_channels = ['lfg', 'raid', 'looking-for-group', 'testing', '🍕-dense-pizza-🍕']
+syrion_channels = ["That's a wipe"]
 
 options = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫"]
 
@@ -27,7 +29,7 @@ active_activity = {}
 reaction_monitor_message = {}
 
 activity_types = ['Raid', 'Strike', 'Milestones', 'Other']
-raid_types = ['Leviathan', 'Eater of Worlds', 'Spire of Stars', 'Prestige Leviathan']
+raid_types = ['Leviathan', 'Prestige Leviathan', 'Eater of Worlds', 'Prestige EoW', 'Spire of Stars', 'Prestige SoS']
 strike_types = ['Vanguard', 'Nightfall', 'Heroic']
 milestone_types = ['Any', 'Flashpoint', 'Clan XP', 'Crucible', 'Other']
 other_types = ['Anything', 'Escalation Protocol', 'Storyline', 'A Cry']
@@ -35,6 +37,13 @@ players_needed = ['1', '2', '3', '4', '5']
 
 raid_messages = {}
 time_options = ["+30 Minutes", "+1 Hour", "+2 Hours", "+4 Hours", "Reset", "Confirm"]
+
+default_volume = 0.3
+
+players = {}
+queues = {}
+volumes = {}
+voice_clients = {}
 
 sexual_jokes = [
     "When do you kick a midget in the balls?\n\nWhen he is standing next to your girlfriend saying her hair smells nice",
@@ -244,9 +253,19 @@ async def on_ready():
     scheduler.enter(1, 1, test)
     scheduler.run()
 
+
 def test():
     print('{} is running.'.format(client.user.name))
     print('')
+
+
+@client.event
+async def on_voice_state_update(before, after):
+    if not after.bot:
+        if before.voice_channel != after.voice_channel:
+            if after.voice_channel is not None and after.voice_channel.type == discord.ChannelType.voice:
+                if after.voice_channel.name in syrion_channels:
+                    await join_syrion_message(after)
 
 
 @client.event
@@ -257,8 +276,8 @@ async def on_message(message):
 
 
 async def check_commands(message):
-    command_params = message.content.lower().strip().split(' ')
-    command_called = command_params[0]
+    command_params = message.content.strip().split(' ')
+    command_called = command_params[0].lower()
     command_params.pop(0)
 
     if command_called[:1] == '!':
@@ -297,42 +316,93 @@ async def check_commands(message):
         elif command_called[1:] == 'help':
             await help_command(message)
 
+        elif "music" in message.channel.name.lower() or "beat" in message.channel.name.lower():
+            if command_called[1:] == 'youtube' or \
+                    command_called[1:] == 'play' or \
+                    command_called[1:] == 'yt':
+                await youtube(message, command_params)
 
-commands = [
-    {
-        'name': 'fireteam',
-        'description': 'Creates a fireteam for others to join.',
-        'aliases': '!ft, !activity'
-    },
-    {
-        'name': 'raid',
-        'description': 'Creates a raid specific group.',
-        'aliases': '!raids'
-    },
-    {
-        'name': 'strike',
-        'description': 'Creates a strike specific group.',
-        'aliases': '!strikes'
-    },
-    {
-        'name': 'milestones',
-        'description': 'Creates a milestones specific group.'
-    },
-    {
-        'name': 'complete',
-        'description': 'Completes a fireteam if no longer needed.',
-        'aliases': '!cancel'
-    },
-    {
-        'name': 'joke',
-        'description': 'Tells a joke.',
-        'aliases': '!jokes'
-    },
-    {
-        'name': 'help',
-        'description': 'Shows this message.',
-    }
-]
+            elif command_called[1:] == 'syrion':
+                await syrion(message)
+
+            elif command_called[1:] == 'queue':
+                await show_queue(message)
+
+            elif command_called[1:] == 'volume':
+                await volume(message, command_params)
+
+            elif command_called[1:] == 'next' or \
+                    command_called[1:] == 'skip':
+                next_song(message.channel.server.id)
+
+
+commands = {
+    'Destiny': [
+        {
+            'name': 'fireteam',
+            'description': 'Creates a fireteam for others to join.',
+            'aliases': '!ft, !activity'
+        },
+        {
+            'name': 'raid',
+            'description': 'Creates a raid specific group.',
+            'aliases': '!raids'
+        },
+        {
+            'name': 'strike',
+            'description': 'Creates a strike specific group.',
+            'aliases': '!strikes'
+        },
+        {
+            'name': 'milestones',
+            'description': 'Creates a milestones specific group.'
+        },
+        {
+            'name': 'complete',
+            'description': 'Completes a fireteam if no longer needed.',
+            'aliases': '!cancel'
+        }
+    ],
+    'Music': [
+        {
+            'name': 'play',
+            'description': 'Play a song from youtube.',
+            'aliases': '!youtube, !yt'
+        },
+        {
+            'name': 'next',
+            'description': 'Skips to the next song in the queue.',
+            'aliases': '!skip'
+        },
+        {
+            'name': 'queue',
+            'description': 'Shows queued music.'
+        },
+        {
+            'name': 'volume',
+            'description': 'Adjust/shows volume of music bot.'
+        },
+        {
+            'name': 'syrion',
+            'description': 'Gets Syrion\'s thoughts.'
+        }
+    ],
+    'Others': [
+        {
+            'name': 'joke',
+            'description': 'Tells a joke.',
+            'aliases': '!jokes'
+        },
+        {
+            'name': 'sexual',
+            'description': 'This does nothing, you filthy minded person.'
+        },
+        {
+            'name': 'help',
+            'description': 'Shows this message.'
+        }
+    ]
+}
 
 
 async def help_command(message):
@@ -340,16 +410,15 @@ async def help_command(message):
     await delete_if_can(message)
     message_content = "```\n"
     message_content += "Hi there,\n"
-    message_content += "My name is {} and I'm here to help!\n\n".format(client.user.name)
+    message_content += "My name is {} and I'm a magical unicorn!\n".format(client.user.name)
     message_content += "Here's what I can do:\n\n"
-    for command in commands:
-        message_content += '!{}: {}\n'.format(command['name'], command['description'])
-        if 'aliases' in command.keys():
-            message_content += '    *Aliases: {}\n\n'.format(command['aliases'])
-        else:
-            message_content += '\n'
-    message_content += "\nPlease note: This bot is being tested on this server, so if you encounter any errors," + \
-                       " please inform MrCouchy."
+    for group in commands.keys():
+        message_content += group + ':\n'
+        for command in commands[group]:
+            message_content += '    !{}: {}\n'.format(command['name'], command['description'])
+            if 'aliases' in command.keys():
+                message_content += '        *Aliases: {}\n'.format(command['aliases'])
+        message_content += '\n'
     message_content += '```'
 
     await client.send_message(channel, message_content)
@@ -403,7 +472,7 @@ async def clear_command_with_message(message, command_params):
 def get_activity_info_template(user):
     global active_activity
 
-    raid_info = user.mention + " is {}. 👍 if you're interested.\n\n"
+    raid_info = user.mention + " is {}. 👍 if you're interested. @here\n\n"
     raid_info += "For: {}\n\n"
     raid_info += "Time: {}\n\n"
     raid_info += "Players Needed: {}\n\n"
@@ -937,6 +1006,169 @@ class Counter(Thread):
                     self.loop.create_task(update_main_message(self.user))
             else:
                 self._stop.set()
+
+
+def check_queue(server_id):
+    if len(queues[server_id]):
+        player = queues[server_id].pop(0)
+        players[server_id] = player
+        set_player_volume(player, server_id)
+        player.start()
+    # else:
+    # disconnect(server_id)
+
+
+async def volume(message, params):
+    bot_volume = None
+    if len(params):
+        bot_volume = params[0]
+    if not bot_volume or not bot_volume.isdigit():
+        if message.channel.server in volumes:
+            volume_value = volumes[message.channel.server] * 100
+        else:
+            volume_value = default_volume * 100
+
+        text_message = "Volume is currently set to {}%.".format(int(volume_value))
+    elif int(bot_volume) > 100 or int(bot_volume) < 0:
+        text_message = "Volume can be set between 0-100%."
+    else:
+        bot_volume = int(bot_volume)
+        volumes[message.channel.server] = bot_volume / 100
+
+        if message.channel.server.id in players.keys():
+            players[message.channel.server.id].volume = bot_volume / 100
+            print("Setting player to " + str(bot_volume / 100))
+
+        text_message = "Volume set to " + str(bot_volume) + "%."
+
+    await client.send_message(message.channel, text_message)
+
+
+async def show_queue(message):
+    text_message = ''
+    index = 0
+    server_id = message.author.voice_channel.server.id
+    print(server_id)
+    print(queues)
+    print(queues.keys())
+    if server_id in queues.keys() or server_id in players.keys():
+        if server_id in players.keys():
+            index_prefix = 'Currently Playing: '
+            duration = get_duration(players[server_id])
+            text_message += "**" + index_prefix + "**" + players[server_id].title + " " + duration + "\n\n"
+        if len(queues[server_id]):
+            for queue_item in queues[server_id]:
+                duration = get_duration(queue_item)
+
+                index += 1
+                index_prefix = str(index) + ": "
+                text_message += "**" + index_prefix + "**" + queue_item.title + " " + duration + "\n\n"
+                print(text_message)
+        if text_message != '':
+            await client.send_message(message.channel, "🎶 Music Queue 🎶\n\n" + text_message)
+
+    print("No items queued")
+    return
+
+
+def get_duration(queue_item):
+    hours = queue_item.duration // 3600
+    minutes = "{:02}".format((queue_item.duration // 60) - (hours * 60))
+    seconds = "{:02}".format(queue_item.duration - (hours * 3600) - (int(minutes) * 60))
+
+    duration = "** ["
+    if hours > 0:
+        duration += str(hours) + ":"
+    duration += str(minutes) + ":" + str(seconds)
+    duration += "]**"
+    return duration
+
+
+async def play_syrion_audio(channel):
+    items = os.listdir('Syrion')
+    random_number = random.randint(0, len(items) - 1)
+    line_name = items[random_number]
+
+    await pause_to_play(channel, "Syrion\\" + line_name)
+
+
+async def syrion(message):
+    await play_syrion_audio(message.author.voice_channel)
+
+
+async def youtube(message, params):
+    await add_to_queue(message.author.voice_channel, params[0])
+
+
+async def join_syrion_message(user):
+    await play_syrion_audio(user.voice_channel)
+
+
+async def pause_to_play(voice_channel, url):
+    pause_player(voice_channel.server.id)
+
+    await set_voice_client(voice_channel)
+
+    voice_clients[voice_channel.server.id] \
+        .create_ffmpeg_player(url, after=lambda: resume_player(voice_channel.server.id)) \
+        .start()
+
+
+def resume_player(server_id):
+    if server_id in players.keys():
+        players[server_id].resume()
+
+
+def pause_player(server_id):
+    if server_id in players.keys():
+        players[server_id].pause()
+
+
+async def set_voice_client(voice_channel):
+    if voice_channel.server.id in voice_clients and voice_clients[voice_channel.server.id] is not None:
+        if voice_clients[voice_channel.server.id].channel != voice_channel:
+            voice_clients[voice_channel.server.id].move_to(voice_channel)
+    else:
+        voice_clients[voice_channel.server.id] = await client.join_voice_channel(voice_channel)
+
+
+async def add_to_queue(voice_channel, url):
+    global voice_clients
+    server_id = voice_channel.server.id
+
+    await set_voice_client(voice_channel)
+
+    player = await voice_clients[voice_channel.server.id].create_ytdl_player(url, after=lambda: check_queue(server_id))
+
+    if server_id not in queues:
+        queues[server_id] = []
+
+    set_player_volume(player, server_id)
+
+    if server_id not in players:
+        players[server_id] = player
+        player.start()
+    else:
+        queues[server_id].append(player)
+        if not players[server_id].is_playing():
+            check_queue(server_id)
+
+
+def set_player_volume(player, server_id):
+    if server_id in volumes:
+        player.volume = volumes[server_id]
+    else:
+        player.volume = default_volume
+
+
+def next_song(server_id):
+    if server_id in players:
+        players[server_id].stop()
+
+
+# TODO setup disconnect monitor
+# async def disconnect(server_id):
+#     await voice_clients[server_id].disconnect()
 
 
 client.run(token)
