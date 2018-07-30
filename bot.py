@@ -1,5 +1,6 @@
 from threading import Thread, Event
 from time import sleep
+from discord import opus
 import discord
 import sched
 import time
@@ -19,10 +20,6 @@ print('Launching bot...', end="", flush=True)
 
 client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
-
-
-from discord import opus
-
 OPUS_LIBS = ['libopus-0.x86.dll', 'libopus-0.x64.dll', 'libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib']
 
 
@@ -382,46 +379,47 @@ commands = {
             'description': 'Completes a fireteam if no longer needed.',
             'aliases': '!cancel'
         }
-    ],
-    'Music': [
-        {
-            'name': 'play',
-            'description': 'Play a song from youtube.',
-            'aliases': '!youtube, !yt'
-        },
-        {
-            'name': 'next',
-            'description': 'Skips to the next song in the queue.',
-            'aliases': '!skip'
-        },
-        {
-            'name': 'queue',
-            'description': 'Shows queued music.'
-        },
-        {
-            'name': 'volume',
-            'description': 'Adjust/shows volume of music bot.'
-        },
-        {
-            'name': 'syrion',
-            'description': 'Gets Syrion\'s thoughts.'
-        }
-    ],
-    'Others': [
-        {
-            'name': 'joke',
-            'description': 'Tells a joke.',
-            'aliases': '!jokes'
-        },
-        {
-            'name': 'sexual',
-            'description': 'This does nothing, you filthy minded person.'
-        },
-        {
-            'name': 'help',
-            'description': 'Shows this message.'
-        }
     ]
+    # ,
+    # 'Music': [
+    #     {
+    #         'name': 'play',
+    #         'description': 'Play a song from youtube.',
+    #         'aliases': '!youtube, !yt'
+    #     },
+    #     {
+    #         'name': 'next',
+    #         'description': 'Skips to the next song in the queue.',
+    #         'aliases': '!skip'
+    #     },
+    #     {
+    #         'name': 'queue',
+    #         'description': 'Shows queued music.'
+    #     },
+    #     {
+    #         'name': 'volume',
+    #         'description': 'Adjust/shows volume of music bot.'
+    #     },
+    #     {
+    #         'name': 'syrion',
+    #         'description': 'Gets Syrion\'s thoughts.'
+    #     }
+    # ],
+    # 'Others': [
+    #     {
+    #         'name': 'joke',
+    #         'description': 'Tells a joke.',
+    #         'aliases': '!jokes'
+    #     },
+    #     {
+    #         'name': 'sexual',
+    #         'description': 'This does nothing, you filthy minded person.'
+    #     },
+    #     {
+    #         'name': 'help',
+    #         'description': 'Shows this message.'
+    #     }
+    # ]
 }
 
 
