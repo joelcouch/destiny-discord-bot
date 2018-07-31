@@ -1142,7 +1142,10 @@ async def add_to_queue(voice_channel, url):
 
     await set_voice_client(voice_channel)
 
-    player = await voice_clients[voice_channel.server.id].create_ytdl_player(url, after=lambda: check_queue(server_id))
+    player = await voice_clients[voice_channel.server.id]\
+        .create_ytdl_player(url,
+                            before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
+                            after=lambda: check_queue(server_id))
 
     if server_id not in queues:
         queues[server_id] = []
