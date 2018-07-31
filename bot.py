@@ -1,6 +1,5 @@
 from threading import Thread, Event
 from time import sleep
-from discord import opus
 import discord
 import sched
 import time
@@ -9,6 +8,7 @@ import os
 import random
 
 from discord.ext import commands
+from opus_loader import load_opus_lib
 
 description = 'I like trains.'
 prefix = '!'
@@ -20,22 +20,8 @@ print('Launching bot...', end="", flush=True)
 
 client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
-OPUS_LIBS = ['libopus-0.x86.dll', 'libopus-0.x64.dll', 'libopus-0.dll', 'libopus.so.0', 'libopus.0.dylib']
 
-
-def load_opus_lib(opus_libs=OPUS_LIBS):
-    if opus.is_loaded():
-        return True
-
-    for opus_lib in opus_libs:
-        try:
-            opus.load_opus(opus_lib)
-            return
-        except OSError:
-            pass
-
-    raise RuntimeError('Could not load an opus lib. Tried %s' % (', '.join(opus_libs)))
-
+load_opus_lib()
 
 lfg_channels = ['lfg', 'raid', 'looking-for-group', 'testing', '🍕-dense-pizza-🍕']
 syrion_channels = ["That's a wipe"]
