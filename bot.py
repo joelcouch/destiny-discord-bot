@@ -20,6 +20,7 @@ print('Launching bot...', end="", flush=True)
 
 client = commands.Bot(description=description, command_prefix=prefix)
 scheduler = sched.scheduler(time.time, time.sleep)
+load_opus_lib()
 
 lfg_channels = ['lfg', 'raid', 'looking-for-group', 'testing', '🍕-dense-pizza-🍕']
 syrion_channels = ["That's a wipe"]
@@ -250,8 +251,6 @@ jokes = [
 @client.event
 async def on_ready():
     global lfg_channels, scheduler
-
-    load_opus_lib()
 
     print(" success!")
     scheduler.enter(1, 1, test)
@@ -1090,10 +1089,14 @@ def get_duration(queue_item):
 
 async def play_syrion_audio(channel):
     items = os.listdir('Syrion')
+    print(os.listdir('Syrion'))
+    print(os.listdir('/Syrion'))
+    print(os.listdir('\\Syrion'))
+    print(os.listdir(''))
     random_number = random.randint(0, len(items) - 1)
     line_name = items[random_number]
 
-    await pause_to_play(channel, ".\\Syrion\\" + line_name)
+    await pause_to_play(channel, "Syrion/" + line_name)
 
 
 async def syrion(message):
