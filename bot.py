@@ -367,30 +367,30 @@ commands = {
             'aliases': '!cancel'
         }
     ],
-    # 'Music': [
-    #     {
-    #         'name': 'play',
-    #         'description': 'Play a song from youtube.',
-    #         'aliases': '!youtube, !yt'
-    #     },
-    #     {
-    #         'name': 'next',
-    #         'description': 'Skips to the next song in the queue.',
-    #         'aliases': '!skip'
-    #     },
-    #     {
-    #         'name': 'queue',
-    #         'description': 'Shows queued music.'
-    #     },
-    #     {
-    #         'name': 'volume',
-    #         'description': 'Adjust/shows volume of music bot.'
-    #     },
-    #     {
-    #         'name': 'syrion',
-    #         'description': 'Gets Syrion\'s thoughts.'
-    #     }
-    # ],
+    'Music': [
+        {
+            'name': 'play',
+            'description': 'Play a song from youtube.',
+            'aliases': '!youtube, !yt'
+        },
+        {
+            'name': 'next',
+            'description': 'Skips to the next song in the queue.',
+            'aliases': '!skip'
+        },
+        {
+            'name': 'queue',
+            'description': 'Shows queued music.'
+        },
+        {
+            'name': 'volume',
+            'description': 'Adjust/shows volume of music bot.'
+        },
+        {
+            'name': 'syrion',
+            'description': 'Gets Syrion\'s thoughts.'
+        }
+    ],
     'Others': [
         {
             'name': 'joke',
@@ -1093,7 +1093,7 @@ async def play_syrion_audio(channel):
     random_number = random.randint(0, len(items) - 1)
     line_name = items[random_number]
 
-    await pause_to_play(channel, "Syrion\\" + line_name)
+    await pause_to_play(channel, ".\\Syrion\\" + line_name)
 
 
 async def syrion(message):
