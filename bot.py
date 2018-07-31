@@ -40,7 +40,7 @@ players_needed = ['1', '2', '3', '4', '5']
 raid_messages = {}
 time_options = ["+30 Minutes", "+1 Hour", "+2 Hours", "+4 Hours", "Reset", "Confirm"]
 
-default_volume = 0.3
+default_volume = 0.05
 
 players = {}
 queues = {}
@@ -268,6 +268,7 @@ async def on_voice_state_update(before, after):
         if before.voice_channel != after.voice_channel:
             if after.voice_channel is not None and after.voice_channel.type == discord.ChannelType.voice:
                 if after.voice_channel.name in syrion_channels:
+                    sleep(1)
                     await join_syrion_message(after)
 
 
