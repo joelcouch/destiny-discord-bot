@@ -1089,8 +1089,6 @@ def get_duration(queue_item):
 
 async def play_syrion_audio(channel):
     items = os.listdir('Syrion')
-    print(os.listdir('Syrion'))
-    print(os.listdir('/app'))
     random_number = random.randint(0, len(items) - 1)
     line_name = items[random_number]
 
