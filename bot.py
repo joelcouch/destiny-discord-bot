@@ -23,7 +23,7 @@ scheduler = sched.scheduler(time.time, time.sleep)
 load_opus_lib()
 
 lfg_channels = ['lfg', 'raid', 'looking-for-group', 'testing', '🍕-dense-pizza-🍕']
-syrion_channels = ["That's a wipe"]
+syrion_channels = ["That's a wipe", "⭐ Lamingtions ⭐"]
 
 options = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫"]
 
@@ -40,7 +40,7 @@ players_needed = ['1', '2', '3', '4', '5']
 raid_messages = {}
 time_options = ["+30 Minutes", "+1 Hour", "+2 Hours", "+4 Hours", "Reset", "Confirm"]
 
-default_volume = 0.05
+default_volume = 0.03
 
 players = {}
 queues = {}
