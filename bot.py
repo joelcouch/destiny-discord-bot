@@ -18,6 +18,7 @@ prefix = '!'
 
 # token = open('token.txt', 'r').read()
 token = os.environ['DISCORD_TOKEN']
+print(os.environ['DISCORD_TOKEN'])
 
 print("")
 print('Launching bot...', end="", flush=True)
