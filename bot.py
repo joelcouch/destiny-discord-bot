@@ -9,11 +9,15 @@ import random
 
 from discord.ext import commands
 from opus_loader import load_opus_lib
+from boto.s3.connection import S3Connection
 
+
+# s3 = S3Connection(os.environ['S3_KEY'], os.environ['S3_SECRET'])
 description = 'I like trains.'
 prefix = '!'
 
-token = open('token.txt', 'r').read()
+# token = open('token.txt', 'r').read()
+token = os.environ['DISCORD_TOKEN']
 
 print("")
 print('Launching bot...', end="", flush=True)
