@@ -15,6 +15,7 @@ multidict ~= 4.3.1
 opuslib ~= 3.0.1
 pipenv ~= 2018.6.25
 pycparser ~= 2.18
+pychalk ~= 2.0.1
 PyNaCl ~= 1.0.1
 s3transfer==0.1.13
 six ~= 1.11.0
