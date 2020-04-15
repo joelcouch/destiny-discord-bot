@@ -226,7 +226,7 @@ async def help_command(message):
             if 'aliases' in command.keys():
                 aliasString = ''
                 for aliasName in command['aliases']:
-                    if aliasString != ''
+                    if aliasString
                         aliasString += ', '
                     aliasString += '!{}'.format(aliasName)
                 message_content += '        *Aliases: {}\n'.format(aliasString)
